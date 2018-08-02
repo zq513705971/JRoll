@@ -32,6 +32,7 @@
       textRelease: '释放刷新',
       textLoading: '正在加载',
       textFinish: '刷新完成',
+      immediately: false, //默认手动下拉进行刷新，为true时，直接进行刷新操作
       spinning: true, // 应网友要求添加一个选项控制loading时是否旋转icon
       refresh: null // 刷新自定义执行的函数
     }
@@ -98,7 +99,7 @@
     })
 
     // 执行刷新
-    function doRefresh () {
+    function doRefresh() {
       if (!loading) {
         loading = true
         rotating = true
@@ -111,6 +112,8 @@
             options.refresh(function () {
               // 完成刷新
               rotating = false
+              if (options.immediately)
+                iconSpan.style[TSF] = 'rotateZ(0deg)';
               iconSpan.innerHTML = options.iconFinish
               textSpan.innerHTML = options.textFinish
 
@@ -120,6 +123,8 @@
 
                 me.scrollTo(0, 0, 200, true, function () {
                   loading = false
+                  if (options.immediately)
+                    iconSpan.style[TSF] = 'rotateZ(180deg)';
                   iconSpan.innerHTML = options.iconArrow
                   textSpan.innerHTML = options.textPull
                 }).minScrollY = 0
@@ -131,7 +136,7 @@
     }
 
     // 使iconSpan旋转下来
-    function makeRotate () {
+    function makeRotate() {
       angle = angle + 6 >= 360 ? 0 : angle + 6
       iconSpan.style[TSF] = 'rotateZ(' + angle + 'deg)'
 
@@ -140,6 +145,21 @@
       } else {
         iconSpan.style[TSF] = 'rotateZ(0deg)'
       }
+    }
+
+    //打开时直接执行刷新操作
+    if (options.immediately) {
+      iconSpan.style[TSF] = 'rotateZ(0deg)'
+      iconSpan.innerHTML = options.iconLoading
+      textSpan.innerHTML = options.textLoading
+      setTimeout(function () {
+        me.scrollTo(0, 44, 200, true, function () {
+          doRefresh()
+        }).minScrollY = 44
+        moveTo(boxDiv, 0, 44, 200)
+
+        me.options.momentum = true
+      }, 200)
     }
 
     return me

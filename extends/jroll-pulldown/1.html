@@ -13,7 +13,7 @@
       height: 100%;
       background: #dadada;
     }
-    
+
     header {
       height: 44px;
       line-height: 44px;
@@ -21,7 +21,7 @@
       background: #da020c;
       color: #fff;
     }
-    
+
     header>a {
       height: 34px;
       line-height: 34px;
@@ -29,26 +29,26 @@
       top: 5px;
       left: 10px;
     }
-    
+
     h1 {
       margin: 0;
       padding: 0;
       font-size: 18px;
       font-weight: normal;
     }
-    
+
     #wrapper {
       position: absolute;
       top: 44px;
       bottom: 0;
       width: 100%;
     }
-    
+
     #scroller {
       margin: 0;
       padding: 0;
     }
-    
+
     #scroller li {
       height: 60px;
       line-height: 60px;
@@ -56,7 +56,7 @@
       text-indent: 1em;
       background: #fff;
     }
-    
+
     #scroller li:nth-last-child(1) {
       border-bottom: none;
     }
@@ -97,21 +97,22 @@
   <script>
     //模拟ajax加载
     function ajax(params) {
-      setTimeout(function() {
+      setTimeout(function () {
         params.success();
       }, 800);
     }
 
     var jroll = new JRoll("#wrapper");
     jroll.pulldown({
-      refresh: function(complete) {
+      immediately: true,
+      refresh: function (complete) {
         ajax({
-          success: function() {
+          success: function () {
             //异步数据加载完成后必须要执行该complete方法才能结束loading
             complete();
 
             //每行加20表示已刷新
-            jroll.scroller.innerHTML = jroll.scroller.innerHTML.replace(/\d+/g, function(match) {
+            jroll.scroller.innerHTML = jroll.scroller.innerHTML.replace(/\d+/g, function (match) {
               return match * 1 + 20;
             });
           }
