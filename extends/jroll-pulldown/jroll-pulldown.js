@@ -135,6 +135,22 @@
       }
     }
 
+    // 手动刷新
+    function manualRefresh() {
+      iconSpan.style[TSF] = 'rotateZ(0deg)'
+      iconSpan.innerHTML = options.iconLoading
+      textSpan.innerHTML = options.textLoading
+      setTimeout(function () {
+        me.scrollTo(0, 44, 200, true, function () {
+          doRefresh()
+        }).minScrollY = 44
+        moveTo(boxDiv, 0, 44, 200)
+
+        me.options.momentum = true
+      }, 200)
+    }
+    me.doRefresh = manualRefresh
+
     // 使iconSpan旋转下来
     function makeRotate() {
       angle = angle + 6 >= 360 ? 0 : angle + 6
@@ -148,19 +164,7 @@
     }
 
     //打开时直接执行刷新操作
-    if (options.immediately) {
-      iconSpan.style[TSF] = 'rotateZ(0deg)'
-      iconSpan.innerHTML = options.iconLoading
-      textSpan.innerHTML = options.textLoading
-      setTimeout(function () {
-        me.scrollTo(0, 44, 200, true, function () {
-          doRefresh()
-        }).minScrollY = 44
-        moveTo(boxDiv, 0, 44, 200)
-
-        me.options.momentum = true
-      }, 200)
-    }
+    options.immediately && manualRefresh();
 
     return me
   }
